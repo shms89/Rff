@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>لعبة أساطير الأندية</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0ff" />
+<style>
+  body { font-family: Arial, sans-serif; background: #222; color: #0ff; text-align: center; padding: 20px; }
+  input, button { font-size: 18px; padding: 10px; margin: 10px; }
+  #clubName { font-weight: bold; font-size: 24px; margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<h1>لعبة أساطير الأندية</h1>
+
+<div id="clubName"></div>
+
+<input type="text" id="playerGuess" placeholder="اكتب اسم أفضل لاعب" />
+<button onclick="submitGuess()">تخمين</button>
+
+<div id="result"></div>
+
+<script>
+  const clubs = [
+    {name: "ميلان", players: ["مالديني", "ريكاردو كاكا", "ريكاردو مونتي"]},
+    {name: "إنتر ميلان", players: ["خافيير زانيتي", "رونالدو", "جونار هانسن"]},
+    {name: "باريس سان جيرمان", players: ["نبيل معلول", "نيمار", "مبابي"]},
+    {name: "مانشستر سيتي", players: ["كينغسلي كومان", "كيفين دي بروين", "سيرجيو أجويرو"]}
+  ];
+
+  let currentClubIndex = 0;
+  const clubNameEl = document.getElementById("clubName");
+  const playerGuessEl = document.getElementById("playerGuess");
+  const resultEl = document.getElementById("result");
+
+  function showClub() {
+    playerGuessEl.value = "";
+    resultEl.textContent = "";
+    clubNameEl.textContent = "اختر أفضل لاعب في نادي: " + clubs[currentClubIndex].name;
+  }
+
+  function submitGuess() {
+    const guess = playerGuessEl.value.trim();
+    if (!guess) {
+      alert("من فضلك اكتب اسم لاعب");
+      return;
+    }
+    if (clubs[currentClubIndex].players.includes(guess)) {
+      resultEl.textContent = "إجابة صحيحة!";
+      currentClubIndex++;
+      if (currentClubIndex >= clubs.length) {
+        alert("انتهت اللعبة! شكراً للعب.");
+        currentClubIndex = 0;
+      }
+      showClub();
+    } else {
+      resultEl.textContent = "خطأ، حاول مرة أخرى.";
+    }
+  }
+
+  showClub();
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').then(function() {
+      console.log('Service Worker Registered');
+    });
+  }
+</script>
+
+</body>
+</html>
